@@ -32,7 +32,10 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult CreateShirt(Shirt shirt)
         {
-            return Ok(shirt);
+            db.Shirts.Add(shirt);
+            db.SaveChanges();
+
+            return CreatedAtAction(nameof(GetShirtById), new { id = shirt.ShirtId }, shirt);
         }
 
         [HttpPut("{id}")]
