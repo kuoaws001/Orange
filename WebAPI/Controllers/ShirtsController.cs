@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Data;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -7,10 +8,17 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class ShirtsController: ControllerBase
     {
+        private readonly ApplicationDbContext db;
+
+        public ShirtsController(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
+
         [HttpGet]
         public IActionResult GetShirts()
         {
-            return Ok(123);
+            return Ok(db.Shirts.ToList());
         }
 
         [HttpGet("{id}")]
