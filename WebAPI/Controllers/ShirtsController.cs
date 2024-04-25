@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data;
+using WebAPI.Filters.ActionFilters;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -22,9 +23,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(Shirt_ValidateShirtIdFilterAttribute))]
         public IActionResult GetShirtById(int id)
         {
-            return Ok($"{id}");
+            return Ok(HttpContext.Items["shirt"]);
         }
 
         [HttpPost]
