@@ -33,10 +33,17 @@ namespace WebApp.Data
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
-        public async Task InvokePut<T>(string relativeUrl, T obj)
+        public async Task InvokePut<T>(string url, T obj)
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
-            var response = await httpClient.PutAsJsonAsync(relativeUrl, obj);
+            var response = await httpClient.PutAsJsonAsync(url, obj);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task InvokeDelete(string url)
+        {
+            var httpClient = httpClientFactory.CreateClient(apiName);
+            var response = await httpClient.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
         }
     }
