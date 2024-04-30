@@ -1,5 +1,4 @@
-﻿
-namespace WebApp.Data
+﻿namespace WebApp.Data
 {
     public class WebApiExecuter : IWebApiExecuter
     {
@@ -15,20 +14,20 @@ namespace WebApp.Data
         public async Task<T?> InvokeGet<T>(string url)
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
+            //return await httpClient.GetFromJsonAsync<T>(url);
 
-            return await httpClient.GetFromJsonAsync<T>(url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var response = await httpClient.SendAsync(request);
+            await HandlePotentialError(response);
 
-            //var request = new HttpRequestMessage(HttpMethod.Get, url);
-            //var response = await httpClient.SendAsync(request);
-
-            //return await response.Content.ReadFromJsonAsync<T>();
+            return await response.Content.ReadFromJsonAsync<T>();
         }
 
         public async Task<T?> InvokePost<T>(string url, T obj)
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
             var response = await httpClient.PostAsJsonAsync<T>(url, obj);
-            response.EnsureSuccessStatusCode();
+            await HandlePotentialError(response);
 
             return await response.Content.ReadFromJsonAsync<T>();
         }
@@ -37,17 +36,37 @@ namespace WebApp.Data
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
             var response = await httpClient.PutAsJsonAsync(url, obj);
-            response.EnsureSuccessStatusCode();
+            await HandlePotentialError(response);
         }
 
         public async Task InvokeDelete(string url)
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
             var response = await httpClient.DeleteAsync(url);
-            response.EnsureSuccessStatusCode();
+            await HandlePotentialError(response);
+        }
+
+        private async Task HandlePotentialError(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorJson = await response.Content.ReadAsStringAsync();
+                throw new WebApiException(errorJson);
+            }
         }
     }
 }
 
 
 // Nuget Microsoft.Extensions.Http
+
+
+//{
+//    "title": "One or more validation errors occurred.",
+//    "status": 404,
+//    "errors": {
+//        "ShirtId": [
+//            "Shirt doesn't exist."
+//        ]
+//    }
+//}
