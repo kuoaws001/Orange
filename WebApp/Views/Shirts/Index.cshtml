@@ -1,6 +1,6 @@
 ﻿@model List<Shirt>
 
-@* <div class="text-danger" asp-validation-summary="All"></div> *@
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
 <h3>Shirts</h3>
 <br />
@@ -28,8 +28,8 @@
                     <td>@shirt.Color</td>
                     <td>@shirt.Size</td>
                     <td>@(shirt.Price.HasValue ? shirt.Price.Value.ToString("c") : "")</td>
-                    @* <td><a class="btn btn-link" asp-controller="shirts" asp-action="updateshirt" asp-route-shirtId="@shirt.ShirtId">Edit</a> </td>
-                    <td><a class="btn btn-link" asp-controller="shirts" asp-action="deleteshirt" asp-route-shirtId="@shirt.ShirtId">Delete</a> </td> *@
+                    <td><a class="btn btn-link" asp-controller="shirts" asp-action="updateshirt" asp-route-shirtId="@shirt.ShirtId">Edit</a> </td>
+                    <td><a class="btn btn-link" asp-controller="shirts" asp-action="deleteshirt" asp-route-shirtId="@shirt.ShirtId">Delete</a> </td>
                 </tr>
             }
         </tbody>
