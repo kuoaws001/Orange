@@ -23,6 +23,15 @@ namespace WebApp.Data
 
             //return await response.Content.ReadFromJsonAsync<T>();
         }
+
+        public async Task<T?> InvokePost<T>(string url, T obj)
+        {
+            var httpClient = httpClientFactory.CreateClient(apiName);
+            var response = await httpClient.PostAsJsonAsync<T>(url, obj);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
     }
 }
 

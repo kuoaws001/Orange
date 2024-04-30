@@ -17,5 +17,25 @@ namespace WebApp.Controllers
         {
             return View(await webApiExecuter.InvokeGet<List<Shirt>>("shirts"));
         }
+
+        public IActionResult CreateShirt()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateShirt(Shirt shirt)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await webApiExecuter.InvokePost("shirts", shirt);
+                if (response != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return View(shirt);
+        }
     }
 }
