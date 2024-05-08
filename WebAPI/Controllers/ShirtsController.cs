@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data;
 using WebAPI.Filters.ActionFilters;
+using WebAPI.Filters.AuthFilters;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [JwtTokenAuthFilter]
     public class ShirtsController: ControllerBase
     {
         private readonly ApplicationDbContext db;

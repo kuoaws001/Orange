@@ -43,5 +43,37 @@ namespace WebAPI.Authority
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
+
+        public static bool VerifyToken(string token, string secretKey)
+        {
+            if (string.IsNullOrEmpty(token)) return false;
+
+            SecurityToken securityToken;
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+                    ValidateLifetime = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ClockSkew = TimeSpan.Zero
+                },
+                out securityToken);
+            }
+            catch (SecurityTokenException)
+            {
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+
+            return securityToken != null;
+        }
     }
 }
