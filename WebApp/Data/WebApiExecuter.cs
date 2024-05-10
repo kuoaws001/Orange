@@ -100,10 +100,10 @@ namespace WebApp.Data
                 token = JsonConvert.DeserializeObject<JwtToken>(strToken);
 
                 httpContextAccessor.HttpContext?.Session.SetString("access_token", strToken);
-
-                // pass the jwt to endpoints through the http headers
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token?.AccessToken);
             }
+
+            // pass the jwt to endpoints through the http headers
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token?.AccessToken);
         }
     }
 }
